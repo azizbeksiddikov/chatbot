@@ -1,0 +1,39 @@
+# Dev overrides: hot reload. Env: host .env.dev is mounted as .env inside the container.
+# Admin: http://localhost:5009/   User: http://localhost:5012/
+services:
+  admin:
+    build:
+      context: .
+      dockerfile: admin/Dockerfile.dev
+    image: chatbot-admin:dev
+    container_name: chatbot-admin-dev
+    environment:
+      - PUBLIC_URL=http://localhost:5009
+    ports:
+      - "5009:5006"
+    volumes:
+      - ./.env.dev:/app/.env
+      - ./admin/src:/app/admin/src
+      - ./admin/files:/app/admin/files
+    command: python app.py
+    networks:
+      - app
+
+  user:
+    build:
+      context: .
+      dockerfile: user/Dockerfile.dev
+    image: chatbot-user:dev
+    container_name: chatbot-user-dev
+    environment:
+      - PUBLIC_URL=http://localhost:5012
+    ports:
+      - "5012:5000"
+    volumes:
+      - ./.env.dev:/app/.env
+      - ./user/backend:/app/user/backend
+      - ./user/frontend:/app/user/frontend:ro
+    command: python -c "from app import app; app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=True)"
+    working_dir: /app/user/backend
+    networks:
+      - app
