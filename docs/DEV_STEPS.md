@@ -8,13 +8,13 @@ One monorepo (`apps/api` + `apps/web`). Build in order — each step produces so
 
 Set up the skeleton. Nothing works yet, but everything is wired.
 
-- [ ] Monorepo folder structure (`apps/api`, `apps/web`, `infra/`, `docs/`)
-- [ ] `docker-compose.yml`: FastAPI + PostgreSQL + pgvector containers
-- [ ] FastAPI app factory + `/health` endpoint
-- [ ] Next.js 16 + Tailwind CSS + shadcn/ui installed
-- [ ] `.env.example` with every variable the app will ever need
-- [ ] Alembic configured (no migrations yet)
-- [ ] `README.md`: how to run locally
+- [x] Monorepo folder structure (`apps/api`, `apps/web`, `infra/`, `docs/`)
+- [x] `docker-compose.yml`: FastAPI + PostgreSQL + pgvector containers
+- [x] FastAPI app factory + `/health` endpoint
+- [x] Next.js 16 + Tailwind CSS + shadcn/ui installed
+- [x] `.env.example` with every variable the app will ever need
+- [x] Alembic configured (no migrations yet)
+- [x] `README.md`: how to run locally
 
 **Done when:** `docker compose up` starts both services, `/health` returns 200, Next.js loads in browser.
 
