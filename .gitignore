@@ -8,18 +8,36 @@
 ### NextJS ###
 # dependencies
 /node_modules
+apps/web/node_modules/
 /.pnp
 .pnp.js
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+apps/web/.pnp
+apps/web/.pnp.*
+apps/web/.yarn/*
+!apps/web/.yarn/patches
+!apps/web/.yarn/plugins
+!apps/web/.yarn/releases
+!apps/web/.yarn/versions
 
 # testing
 /coverage
+apps/web/coverage/
 
 # next.js
 /.next/
 /out/
+apps/web/.next/
+apps/web/out/
 
 # production
 /build
+apps/web/build/
 
 # misc
 .DS_Store
@@ -33,13 +51,18 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env*
+!.env.example
+apps/web/.env*
 
 # vercel
 .vercel
+apps/web/.vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+apps/web/next-env.d.ts
 
 ### Python ###
 # Byte-compiled / optimized / DLL files
@@ -58,7 +81,9 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+/lib/
+!apps/web/src/lib/
+!apps/web/src/lib/**
 lib64/
 parts/
 sdist/

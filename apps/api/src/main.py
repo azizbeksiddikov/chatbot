@@ -10,7 +10,8 @@ from src.dependencies import engine
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     yield
-    await engine.dispose()
+    if engine is not None:
+        await engine.dispose()
 
 
 def create_app() -> FastAPI:
