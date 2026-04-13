@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { AlertCircle, AlertTriangle, CheckCircle2, Info } from "lucide-react"
 import { AdminGuard } from "@/components/screens/admin-guard"
+import { AdminPageHeader } from "@/components/screens/admin-table-primitives"
 import { useAppStore } from "@/components/providers/app-store-provider"
 import { formatTimestamp } from "@/lib/utils"
 import type { SystemErrorSeverity, SystemErrorStatus } from "@/lib/mock-types"
@@ -43,74 +44,68 @@ export function AdminErrorsScreen() {
     return matchSeverity && matchStatus
   })
 
-  const openCount = state.systemErrors.filter((e) => e.status === "open").length
-  const criticalCount = state.systemErrors.filter((e) => e.severity === "critical").length
+  const openCount = state.systemErrors.filter((entry) => entry.status === "open").length
+  const criticalCount = state.systemErrors.filter((entry) => entry.severity === "critical").length
 
   return (
     <AdminGuard>
       <div className="space-y-6">
-        {/* Page header */}
         <div>
-          <p className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
-            Admin
-          </p>
-          <h1 className="mt-1 text-2xl font-semibold tracking-tight">Error log</h1>
+          <AdminPageHeader title="Errors" description="System errors with quick filters and expandable detail." />
           <div className="mt-2 flex flex-wrap gap-2">
             <span className="rounded-full border bg-card px-2.5 py-1 text-xs text-muted-foreground">
               {state.systemErrors.length} total
             </span>
-            {openCount > 0 && (
+            {openCount > 0 ? (
               <span className="rounded-full border bg-rose-500/10 px-2.5 py-1 text-xs font-medium text-rose-600 dark:text-rose-400">
                 {openCount} open
               </span>
-            )}
-            {criticalCount > 0 && (
+            ) : null}
+            {criticalCount > 0 ? (
               <span className="rounded-full border border-rose-500/20 bg-rose-500/10 px-2.5 py-1 text-xs font-medium text-rose-600 dark:text-rose-400">
                 {criticalCount} critical
               </span>
-            )}
+            ) : null}
           </div>
         </div>
 
-        {/* Filters */}
         <div className="flex flex-wrap gap-2">
           <div className="flex flex-wrap gap-1.5">
-            {(["all", "critical", "warn", "info"] as const).map((s) => (
+            {(["all", "critical", "warn", "info"] as const).map((severity) => (
               <button
-                key={s}
+                key={severity}
                 type="button"
-                onClick={() => setSeverityFilter(s)}
+                onClick={() => setSeverityFilter(severity)}
                 className={[
                   "rounded-xl border px-2.5 py-1.5 text-xs font-medium capitalize transition-colors",
-                  severityFilter === s
+                  severityFilter === severity
                     ? "border-primary/30 bg-primary/10 text-primary"
                     : "border-border bg-card text-muted-foreground hover:bg-muted",
                 ].join(" ")}
               >
-                {s === "all" ? "All severity" : s}
+                {severity === "all" ? "All severity" : severity}
               </button>
             ))}
           </div>
           <div className="flex flex-wrap gap-1.5">
-            {(["all", "open", "resolved"] as const).map((s) => (
+            {(["all", "open", "resolved"] as const).map((status) => (
               <button
-                key={s}
+                key={status}
                 type="button"
-                onClick={() => setStatusFilter(s)}
+                onClick={() => setStatusFilter(status)}
                 className={[
                   "rounded-xl border px-2.5 py-1.5 text-xs font-medium capitalize transition-colors",
-                  statusFilter === s
+                  statusFilter === status
                     ? "border-primary/30 bg-primary/10 text-primary"
                     : "border-border bg-card text-muted-foreground hover:bg-muted",
                 ].join(" ")}
               >
-                {s === "all" ? "All status" : s}
+                {status === "all" ? "All status" : status}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Error list */}
         <div className="space-y-2">
           {filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed py-12 text-center">
@@ -146,29 +141,23 @@ export function AdminErrorsScreen() {
                           {error.status}
                         </span>
                       </div>
-                      <p className="mt-1 font-mono text-xs text-muted-foreground">
-                        {error.route}
-                      </p>
-                      <p className="mt-0.5 text-xs text-muted-foreground">
-                        {formatTimestamp(error.createdAt)}
-                      </p>
+                      <p className="mt-1 font-mono text-xs text-muted-foreground">{error.route}</p>
+                      <p className="mt-0.5 text-xs text-muted-foreground">{formatTimestamp(error.createdAt)}</p>
                     </div>
 
                     <span className="ml-auto shrink-0 text-xs text-muted-foreground">
-                      {isExpanded ? "▲" : "▼"}
+                      {isExpanded ? "Hide" : "View"}
                     </span>
                   </button>
 
-                  {isExpanded && (
+                  {isExpanded ? (
                     <div className="border-t bg-muted/30 px-4 pb-4 pt-3">
                       <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
                         Detail
                       </p>
-                      <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                        {error.detail}
-                      </p>
+                      <p className="mt-2 text-sm leading-6 text-muted-foreground">{error.detail}</p>
                     </div>
-                  )}
+                  ) : null}
                 </div>
               )
             })

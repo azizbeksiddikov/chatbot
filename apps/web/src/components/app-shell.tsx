@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
 import {
   BellDot,
+  FolderKanban,
   Gauge,
   LayoutDashboard,
   LifeBuoy,
@@ -22,10 +23,11 @@ import { useAppStore } from "@/components/providers/app-store-provider"
 import { cn } from "@/lib/utils"
 
 const adminNav = [
-  { href: "/admin", label: "Overview", shortLabel: "Overview", icon: Gauge },
-  { href: "/admin/users", label: "Users", shortLabel: "Users", icon: Shield },
-  { href: "/admin/conversations", label: "Chats", shortLabel: "Chats", icon: MessageSquareText },
-  { href: "/admin/errors", label: "Errors", shortLabel: "Errors", icon: BellDot },
+  { href: "/admin", label: "Dashboard", icon: Gauge },
+  { href: "/admin/members", label: "Members", icon: Shield },
+  { href: "/admin/projects", label: "Projects", icon: FolderKanban },
+  { href: "/admin/chats", label: "Chats", icon: MessageSquareText },
+  { href: "/admin/errors", label: "Errors", icon: BellDot },
 ]
 
 function isActivePath(pathname: string, href: string) {
@@ -34,23 +36,15 @@ function isActivePath(pathname: string, href: string) {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const router = useRouter()
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
-  const {
-    currentUser,
-    hydrated,
-    resetDemo,
-    setActiveRole,
-    signOut,
-    state,
-    toggleTheme,
-  } = useAppStore()
+  const { currentUser, hydrated, resetDemo, setActiveRole, signOut, state, toggleTheme } =
+    useAppStore()
 
   if (!hydrated) {
     return (
       <div className="flex min-h-screen items-center justify-center px-4">
         <div className="w-full max-w-sm rounded-[24px] border bg-card p-6 text-center">
-          <p className="text-sm text-muted-foreground">Loading workspace…</p>
+          <p className="text-sm text-muted-foreground">Loading workspace...</p>
         </div>
       </div>
     )
@@ -90,8 +84,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <LayoutDashboard className="size-4" />
         <span>Dashboard</span>
       </Link>
-
-
 
       <div>
         <p className="px-3 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
@@ -203,9 +195,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </div>
           </div>
 
-          <div className="flex-1 px-3 py-4">
-            {isAdmin ? adminSidebar : studentSidebar}
-          </div>
+          <div className="flex-1 px-3 py-4">{isAdmin ? adminSidebar : studentSidebar}</div>
 
           <div className="border-t px-3 py-3">
             <div className="grid grid-cols-3 gap-2">
